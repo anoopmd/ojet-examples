@@ -2,21 +2,38 @@
 <script type="text/javascript" src="main.js"></script>
 
 <link rel="stylesheet" href="../node_modules/@oracle/oraclejet/dist/css/alta/oj-alta.css">
-
-<oj-table id='table' aria-label='Departments Table'
+<h3>Simple Table </h3>
+<oj-table id='table'
   data='[[dataprovider]]' 
   columns='[[columns]]'>
+</oj-table>
+
+<script type="text/html" id="template-user-row">
+  <tr>
+    <td data-bind="text:name"></td>
+    <td data-bind="text:age"></td>
+    <td><img data-bind="attr:{src: url}"></img></td>
+  </tr>
+</script>
+
+<br>
+<h3>Table with Custom row rendering</h3>
+<oj-table id='table'
+  data='[[dataprovider]]' 
+  row-renderer='[[oj.KnockoutTemplateUtils.getRenderer("template-user-row", true)]]'
+  columns='[[columns2]]'>
 </oj-table>
 
 <script type="text/javascript">
   require(['ojs/ojcore', 'knockout', 'jquery',
   'ojs/ojknockout', 'promise', 'ojs/ojtable',
   'ojs/ojarraydataprovider'], function(oj, ko, $) {
+    let imageUrl = 'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50.jpg';
     let users = [
-      {id: 1, name: 'John', age: 25},
-      {id: 2, name: 'Isaac', age: 26},
-      {id: 3, name: 'Albert', age: 27},
-      {id: 4, name: 'Tesla', age: 28},
+      {id: 1, name: 'John', age: 25, url: imageUrl},
+      {id: 2, name: 'Isaac', age: 26, url: imageUrl},
+      {id: 3, name: 'Albert', age: 27, url: imageUrl},
+      {id: 5, name: 'Tesla', age: 28, url: imageUrl}
     ];
 
     let vm = {
@@ -24,6 +41,11 @@
         {"headerText": "Id","field": "id"},
         {"headerText": "Name", "field": "name"},
         {"headerText": "Age", "field": "age"}
+      ],
+      columns2: [
+        {"headerText": "Name"},
+        {"headerText": "Age"},
+        {"headerText": "Photo"}
       ],
       dataprovider: new oj.ArrayDataProvider(users)
     };
