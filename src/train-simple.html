@@ -1,0 +1,42 @@
+<!-- Todo: Train Forms to Submit -->
+<script type="text/javascript" src="../node_modules/requirejs/require.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+<link rel="stylesheet" href="../node_modules/@oracle/oraclejet/dist/css/alta/oj-alta.css">
+<h3>Simple Train </h3>
+<oj-train id="train"
+    class="oj-train-stretch"
+    style="max-width:700px;margin-left:auto;margin-right:auto;"
+    on-selected-step-changed="[[updateLabelText]]"
+    selected-step="{{selectedStepValue}}"
+    steps="[[stepArray]]">
+</oj-train>
+<br/>
+<h3 id="currentStepText"
+  data-bind="text: 'You are on ' + selectedStepLabel()"
+  style="text-align: center">
+</h3>
+
+<script type="text/javascript">
+  require(['ojs/ojcore', 'knockout', 'jquery',
+  'ojs/ojknockout', 'ojs/ojtrain', 'ojs/ojbutton'], function(oj, ko, $) {
+    function TrainData() {
+      var self = this;
+      this.selectedStepValue = ko.observable('stp1');
+      this.selectedStepLabel = ko.observable('Step One');
+      this.stepArray =
+        ko.observableArray(
+                [{label:'Step One', id:'stp1'},
+                 {label:'Step Two', id:'stp2'},
+                 {label:'Step Three', id:'stp3'},
+                 {label:'Step Four', id:'stp4'},
+                 {label:'Step Five', id:'stp5'}]);
+      this.updateLabelText = function(event) {
+         var train = document.getElementById("train");
+         self.selectedStepLabel(train.getStep(event.detail.value).label);
+      };
+    };
+
+    ko.applyBindings(new TrainData());
+  });
+</script>

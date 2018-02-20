@@ -1,0 +1,69 @@
+<script type="text/javascript" src="../node_modules/requirejs/require.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+<link rel="stylesheet" href="../node_modules/@oracle/oraclejet/dist/css/alta/oj-alta.css">
+<style>
+.bold{font-weight: bold;}
+.italic{font-style: italic;}
+.underline{text-decoration: underline;}
+</style>
+<h3>ButtonSets Many</h3>
+<oj-buttonset-many value="{{formats}}">
+  <oj-option value="bold">Bold</oj-option>
+  <oj-option value="italic">Italic</oj-option>
+  <oj-option value="underline">Underline</oj-option>
+</oj-buttonset-many>
+<br>
+<p><a id="formattedText" href="#" data-bind="text: formattedText, css: classes"></a></p>
+
+<p><oj-button on-click='[[toggleBold]]'>Toggle bold</oj-button>
+<oj-button on-click='[[toggleAll]]'>Toggle all 3 (same value for all)</oj-button></p>
+
+<script type="text/javascript">
+  require(['ojs/ojcore', 'knockout', 'jquery',
+  'ojs/ojknockout', 'ojs/ojtrain', 'ojs/ojbutton'], function(oj, ko, $) {
+    function ButtonModel() {
+      var self = this;
+      // observable array bound to the Buttonset:
+      self.formats = ko.observableArray(["bold", "underline"]);
+
+      // use that (entire) observable array:
+      self.classes = ko.computed(function() {
+          return self.formats().join(" ");
+      }, self);
+
+      // isolate single boolean from array:
+      self.bold = ko.computed({
+          read: function() {
+              return self.formats.indexOf("bold") > -1;
+          },
+          write: function(value) {
+              var index = self.formats.indexOf("bold");
+              if (!value && index > -1)
+                  self.formats.splice(index, 1); // remove bold
+              else if (value && index == -1)
+                  self.formats.push("bold");
+          },
+          owner: self
+      });
+
+      // use that single boolean:
+      self.formattedText = ko.computed(function() {
+          return self.bold() ? "This text is bold" : "This text is NOT bold";
+      }, self);
+
+      // illustrates the app setting the original observable:
+      self.toggleAll = function() {
+          var allToggled = self.formats().length == 3;
+          self.formats(allToggled ? [] : ["bold", "italic", "underline"]);
+      };
+
+      // illustrates the app setting the computed observable:
+      self.toggleBold = function() {
+          self.bold(!self.bold());
+      };
+    }
+
+    ko.applyBindings(new ButtonModel());
+  });
+</script>
