@@ -5,6 +5,9 @@ A set of Ojet Examples
 ### Install
 ```bash
 ```
+### FAQ
+*[Choosing a Table or Data Grid](https://docs.oracle.com/middleware/jet201/jet/developer/GUID-7A444A99-036C-46E6-B271-A5E3926E8300.htm#JETDG402)
+
 
 ### References
 * [Featured Demos](http://www.oracle.com/webfolder/ux/middleware/alta/featuredDemos.html)
