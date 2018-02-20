@@ -1,0 +1,33 @@
+<script type="text/javascript" src="../node_modules/requirejs/require.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+<link rel="stylesheet" href="../node_modules/@oracle/oraclejet/dist/css/alta/oj-alta.css">
+
+<oj-table id='table' aria-label='Departments Table'
+  data='[[dataprovider]]' 
+  columns='[[columns]]'>
+</oj-table>
+
+<script type="text/javascript">
+  require(['ojs/ojcore', 'knockout', 'jquery',
+  'ojs/ojknockout', 'promise', 'ojs/ojtable',
+  'ojs/ojarraydataprovider'], function(oj, ko, $) {
+    let users = [
+      {id: 1, name: 'John', age: 25},
+      {id: 2, name: 'Isaac', age: 26},
+      {id: 3, name: 'Albert', age: 27},
+      {id: 4, name: 'Tesla', age: 28},
+    ];
+
+    let vm = {
+      columns: [
+        {"headerText": "Id","field": "id"},
+        {"headerText": "Name", "field": "name"},
+        {"headerText": "Age", "field": "age"}
+      ],
+      dataprovider: new oj.ArrayDataProvider(users)
+    };
+
+    ko.applyBindings(vm);
+  });
+</script>

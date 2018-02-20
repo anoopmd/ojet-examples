@@ -1,0 +1,12 @@
+<script type="text/javascript" src="../node_modules/requirejs/require.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+<oj-input-text value="{{firstName}}"></oj-input-text>
+
+<script type="text/javascript">
+  require(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout', 'ojs/ojinputtext'], function(oj, ko, $) {
+    ko.applyBindings({
+      firstName: 'Jerry'
+    });
+  });
+</script>

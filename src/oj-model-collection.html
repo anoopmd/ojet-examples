@@ -1,7 +1,7 @@
 <script type="text/javascript" src="../node_modules/requirejs/require.js"></script>
 
 <script type="text/javascript">
-  requirejs.config({
+requirejs.config({
   baseUrl: '.',
 
   paths:  {
@@ -49,7 +49,10 @@ require(['ojs/ojcore', 'knockout', 'js/models/user', 'js/models/users'], functio
 
   user
     .fetch({
-      success: (model, response) => console.log(response)
+      success: (model, response) => {
+        console.log(response);
+        console.log(model.get('name'));
+      }
     });
 });
 </script>

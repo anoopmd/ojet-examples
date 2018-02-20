@@ -3,12 +3,10 @@
   "version": "1.0.0",
   "description": "Oracle JavaScript Extension Toolkit(JET) Examples",
   "dependencies": {
-    "@oracle/oraclejet": "~4.2.0",
+    "@oracle/oraclejet": "~4.1.0",
     "lodash": "^4.17.5"
   },
   "devDependencies": {
-    "@oracle/grunt-oraclejet": "~4.2.0",
-    "@oracle/oraclejet-tooling": "~4.2.0",
     "body-parser": "^1.9.0",
     "cors": "^2.4.2",
     "express": "^4.9.7",
