@@ -1,0 +1,73 @@
+<script type="text/javascript" src="../node_modules/requirejs/require.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+<link rel="stylesheet" href="../node_modules/@oracle/oraclejet/dist/css/alta/oj-alta.css">
+<h3>Composite Component Simple</h3>
+
+<div class="oj-flex">
+  <div class="oj-flex-item">
+    <ccdemo-name-badge badge-name="Duke Mascot" id="cc1"
+      data-bind="event:{'badgeSelected' : badgeSelected}"
+      badge-image="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50.jpg">
+      <span slot="greetingArea">Hello</span>
+    </ccdemo-name-badge>
+  </div>
+  <div class="oj-flex-item">
+    <ccdemo-name-badge badge-name="{{name}}" 
+      callback="{{cb}}"
+      data-bind="event:{pending : badgeStartupMonitor, ready : badgeStartupMonitor}"
+      badge-image="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50.jpg">
+    </ccdemo-name-badge>
+  </div>
+  <div class="oj-flex-item">
+    <ccdemo-name-badge
+      badge-name="{{name}}"
+      data-bind="event:{'badgeNameChanged' : badgeNameChangeWatcher}"
+      badge-image="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50.jpg">
+    </ccdemo-name-badge>
+  </div>
+</div>
+
+<script type="text/javascript">
+  require(['ojs/ojcore', 'knockout', 'jquery',  'ojs/ojcomposite',
+  'jet-composites/ccdemo-name-badge/loader',
+  'ojs/ojknockout', 'ojs/ojmodule', 'ojs/ojbutton'], function(oj, ko, $) {
+    function ViewModel() {
+      this.name = ko.observable('John Nash');
+      this.cb = () => console.log('I was called');
+      this.startupTimes = {};
+      this.badgeStartupMonitor = function(viewmodel, event) {
+        var targetCCA = event.target.id;
+        var timeStamp = new Date().getMilliseconds();
+        console.log(event.type);
+        if (event.type === 'pending'){
+            // self.startupTimes[targetCCA] = timeStamp;
+        }
+        else if (event.type === 'ready'){
+           // var startupTime = (timeStamp - self.startupTimes[targetCCA]);
+           // console.log('Startup time for ' 
+           //             + targetCCA + ': ' + startupTime + 'ms');
+        }
+      }
+
+      this.badgeNameChangeWatcher = function(viewmodel, event) {
+        // console.log(viewmodel);
+        // console.log(`${event.detail.previousValue} To ${event.detail.value} `);
+      }
+
+      this.badgeSelected = function(viewmodel, event) {
+        console.log('Badge clicked');
+        console.log(event.detail);
+      }
+    }
+
+    let vm = new ViewModel();
+
+    vm.name.subscribe((val) => console.log(val));
+
+    setTimeout(() => vm.name('Isaac Newton'), 2000);
+
+    ko.applyBindings(vm);
+    setTimeout(() => document.getElementById("cc1").changeBackground("red"), 2000);
+  });
+</script>

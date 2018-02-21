@@ -1,0 +1,27 @@
+<script type="text/javascript" src="../node_modules/requirejs/require.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+<link rel="stylesheet" href="../node_modules/@oracle/oraclejet/dist/css/alta/oj-alta.css">
+<h3>ojModule InterModule Communication using signals</h3>
+
+<div class="oj-flex">
+  <div
+    class="oj-flex-item"
+    data-bind="ojModule: { name: 'oj-module-inter-module/first', params: {userInfoSignal: userInfoSignal}}">
+  </div>
+
+  <div
+    class="oj-flex-item"
+    data-bind="ojModule: { name: 'oj-module-inter-module/second', params: {userInfoSignal: userInfoSignal}}">
+  </div>
+</div>
+
+<script type="text/javascript">
+  require(['ojs/ojcore', 'knockout', 'jquery', 'signals',
+  'ojs/ojknockout', 'ojs/ojmodule', 'ojs/ojbutton'], function(oj, ko, $, signals) {
+    function RootViewModel() {
+      this.userInfoSignal = new signals.Signal();
+    }
+    ko.applyBindings(new RootViewModel());
+  });
+</script>

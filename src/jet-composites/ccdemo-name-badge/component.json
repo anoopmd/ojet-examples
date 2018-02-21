@@ -1,0 +1,49 @@
+{
+  "name": "ccdemo-name-badge",
+  "displayName": "ccdemo-name-badge",
+  "description": "Describe your component here",
+  "version": "1.0.0",
+  "jetVersion": "4.1.0",
+  "properties":{
+    "badgeName" : {
+      "type" : "string",
+      "writeback": true,
+      "value": "Anonymous"
+    },
+    "callback" : {
+      "type" : "function"
+    },
+    "badgeImage" : {
+      "type" : "string"
+    }
+  },
+  "events" : {
+    "badgeSelected" : {
+      "description" : "The event that consuming views can use to recognize when this badge is selected",
+      "bubbles" : true,
+      "cancelable" : false,
+      "detail" : {
+        "nameOnBadge" : {"type" : "string"}
+      }
+    }
+  },
+  "methods" : {
+    "changeBackground" : {
+      "description" : "A function to update the background color of the badge",
+      "internalName" : "_setBackgroundColor",
+      "params" : [
+        {
+          "description":"Color name or hex color code",
+          "name" : "colorToSet",
+          "type": "string"
+        }
+      ],
+      "return" : "boolean"
+    }
+  },
+  "slots" : {
+    "greetingArea":{
+      "description" : "Put your customized greeting here"
+    }
+  }
+}
