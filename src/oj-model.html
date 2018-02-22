@@ -1,0 +1,107 @@
+<script type="text/javascript" src="../node_modules/requirejs/require.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+<link rel="stylesheet" href="../node_modules/@oracle/oraclejet/dist/css/alta/oj-alta.css">
+<h3>Model</h3>
+
+<script type="text/javascript">
+  require(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojmodel',
+  'ojs/ojknockout', 'ojs/ojmodule', 'ojs/ojbutton'], function(oj, ko, $) {
+    /* Setting and Getting */
+    // var user = new oj.Model({
+    //   id: 1,
+    //   name: 'John'
+    // });
+
+    // console.log(user.get('id'));
+    // console.log(user.get('name'));
+    // user.set('name', 'Isaac');
+    // console.log(user.get('name'));
+
+    /* Defaults */
+    // var User = new oj.Model.extend({
+    //   defaults: {
+    //     name: 'Anonymous'
+    //   }
+    // });
+
+    // var user = new User();
+    // console.log(user.get('name'));
+
+    /* toJSON */
+    // var user = new oj.Model({
+    //   id: 1,
+    //   name: 'John'
+    // });
+    // console.log(user.toJSON());
+
+    /* Fetch a Model */
+    // var User = new oj.Model.extend({
+    //   urlRoot: 'http://localhost:5000/api/users'
+    // });
+    // var user = new User({
+    //   id: '3e610a8685abd49e'
+    // });
+    // user
+    //   .fetch()
+    //   .then((data) => console.log(data))
+    //   .catch((error) => console.log(error));
+
+    /* Create a Model (With Validation)*/
+    // var User = new oj.Model.extend({
+    //   urlRoot: 'http://localhost:5000/api/users',
+    //   validate: function(attributes, options) {
+    //     if(!attributes.name) {
+    //       return "Name is Missing";
+    //     }
+    //     if(!attributes.age || isNaN(attributes.age)) {
+    //       return "Age is missing or invalid";
+    //     }
+    //     if(!attributes.city) {
+    //       return "City is Missing";
+    //     }
+    //   }
+    // });
+    // var user = new User({
+    //   name: 'Swapna',
+    //   age: 25,
+    //   city: 'Hyderabad'
+    // });
+    // user
+    //   .save({}, {
+    //     wait: true
+    //   })
+    //   .then((data) => console.log(data))
+    //   .catch((error) => console.log(error));
+
+    /* Update a Model */
+    // var User = new oj.Model.extend({
+    //   urlRoot: 'http://localhost:5000/api/users'
+    // });
+    // var user = new User({
+    //   id: '10a412f6f7b987f8'
+    // });
+    // user
+    //   .fetch()
+    //   .then(() => {
+    //     user.set('name', 'New Name');
+    //     console.log(user.toJSON());
+    //     return user.save();
+    //   })
+    //   .then((data) => console.log(data))
+    //   .catch((error) => console.log(error));
+
+    /* Delete a Model */
+    // var User = new oj.Model.extend({
+    //   urlRoot: 'http://localhost:5000/api/users'
+    // });
+    // var user = new User({
+    //   id: 'a5f2ccdf8d1fafbd'
+    // });
+
+    // user
+    //   .destroy()
+    //   .then((data) => console.log(data))
+    //   .catch((error) => console.log(error));
+  });
+</script>

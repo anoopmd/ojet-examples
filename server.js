@@ -1,44 +1,52 @@
-let express = require("express"),
-    bodyParser = require("body-parser"),
-    _ = require("lodash"),
-    path = require("path"),
-    cors = require("cors"),
-    app = express(),
-    port = process.env.PORT || 5000;
+const feathers = require('@feathersjs/feathers');
+const express = require('@feathersjs/express');
+const cors = require('cors');
 
-let getRandomInteger = function(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
-}
+const NeDB = require('nedb');
+const service = require('feathers-nedb');
 
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
+const db = new NeDB({
+  filename: './db-data/messages',
+  autoload: true
+});
+
+// Create an Express compatible Feathers application instance.
+const app = express(feathers());
+
+// Turn on JSON parser for REST services
+app.use(express.json());
+
+// Turn on CORS
 app.use(cors());
 
-app.get("/", function(req, res, next) {
-  return res.send("OJet API");
-});
+// Turn on URL-encoded parser for REST services
+app.use(express.urlencoded({extended: true}));
 
-app.get("/api/users", function(req, res, next) {
-  let users = require('./data/users.json');
-  return res.json(users);
-});
+// Enable REST services
+app.configure(express.rest());
 
-app.get("/api/users/:id", function(req, res, next) {
-  let users = require('./data/users.json');
-  return res.json(_.find(users, (user) => user.id = req.params.id));
-});
+// Connect to the db, create and register a Feathers service.
+app.use('/api/users', service({
+  Model: db,
+  id: 'id',
+  paginate: {
+    default: 5,
+    max: 100
+  }
+}));
 
-app.use(function(req, res, next) {
-  res.status(404);
-  return res.type("txt").send("Not found");
-});
+// Event Handlers
+let userService = app.service('api/users');;
+userService.on('created', (user, context) => console.log('created', user));
+userService.on('updated', (user, context) => console.log('updated', user));
+userService.on('removed', (user, context) => console.log('removed', user));
 
-let server = app.listen(port, function() {
-  let host = server.address().address,
-    port = server.address().port;
+// Set up default error handler
+app.use(express.errorHandler());
 
-  console.log("Ojet server listening at http://%s:%s", host, port);
+// Start the server.
+const port = 5000;
+
+app.listen(port, () => {
+  console.log(`Feathers server listening on port ${port}`);
 });
