@@ -2,35 +2,75 @@
 <script type="text/javascript" src="main.js"></script>
 
 <link rel="stylesheet" href="../node_modules/@oracle/oraclejet/dist/css/alta/oj-alta.css">
+<h3>Server Side Pagination</h3>
 
-<h3>Pageable Collection</h3>
+<oj-table id="table" data="[[pagingDatasource]]"
+  columns='[[columns]]'
+  selectionMode='{"row": "none", "column": "none"}'
+  row-renderer='[[oj.KnockoutTemplateUtils.getRenderer("row_tmpl", true)]]'>
+
+  <oj-paging-control data='[[pagingDatasource]]' page-size='5'
+      style="margin-top: 5px;" slot='bottom'>
+  </oj-paging-control> 
+</oj-table>
+
+<script type="text/html" id="row_tmpl">    
+  <tr>
+    <td><div data-bind="text: name"></div></td>
+    <td><div data-bind="text: age"></div></td>
+    <td><div data-bind="text: city"></div></td>
+  </tr>
+</script>
 
 <script type="text/javascript">
-  require(['ojs/ojcore', 'knockout', 'jquery',
-  'ojs/ojknockout',
-  'ojs/ojtoolbar', 'ojs/ojbutton', 'ojs/ojmodel'], function(oj, ko, $) {
-    let Bills = oj.Collection.extend({
-      url: 'https://ws-in1.salonify.in/api/billing/bill/history?page=1&per_page=10',
-      customPagingOptions: function(response){
-        console.log(response);
-        return response;
-      }
-    });
+  require(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojmodel',
+  'ojs/ojcollectiontabledatasource', 'ojs/ojtable',
+  'ojs/ojcollectionpagingdatasource',
+  'ojs/ojpagingtabledatasource', 'ojs/ojpagingcontrol',
+  'ojs/ojknockout', 'ojs/ojmodule', 'ojs/ojbutton'], function(oj, ko, $) {
+    function ViewModel() {
+      var User = oj.Model.extend({
+        urlRoot: 'http://localhost:5000/api/users'
+      });
+      var Users = oj.Collection.extend({
+        customURL: function(operation, collection, options) {
+          if(!isNaN(options.fetchSize) && !isNaN(options.startIndex)) {
+            return `http://localhost:5000/api/users?$limit=${options.fetchSize}&$skip=${options.startIndex}`;
+          }
 
-    let bills = new Bills();
-
-    bills
-      .fetch({
-        headers:{
-            "Authorization":"JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTYsInVzZXJuYW1lIjoiYWRtaW4udGVzdDgiLCJhY2NvdW50X2lkIjo4LCJuYW1lc3BhY2UiOiJ0ZXN0OCIsInJvbGUiOiJhZG1pbiIsInV1aWQiOiJjOTZmNmZjMS1iNTM4LTQ2MjMtYjAxNy1iOTQ1NDg5NjJhODUiLCJpYXQiOjE1MTkyNjE1ODIsImV4cCI6MTUxOTM0Nzk4Mn0.-f-rJjim6iUEbejrnCyaoVVm8u8IAqHK-vYJOg8ttcc"
+          return 'http://localhost:5000/api/users';
+        },
+        model: User,
+        customPagingOptions: function(response) {
+          console.log(response);
+          return {
+            totalResults: response.total,
+            limit: response.limit,
+            count: response.data.length,
+            offset: response.skip,
+            hasMore: (response.skip + response.data.length) < response.total
+          };
         }
-      })
-      .then(function(response) {
-        console.log(response);
-      })
-      .catch(function(error) {
-        console.log(error);
       });
 
+      let users = new Users();
+
+      users
+        .fetch()
+        .then((data) => console.log(data))
+        .catch((error) => console.log(error));
+
+      this.columns = [
+        {"headerText": "Name", "field": "name", "sortable": "enabled"},
+        {"headerText": "Age", "field": "age", "sortable": "enabled"},
+        {"headerText": "City", "field": "city", "sortable": "enabled"}
+      ];
+
+      this.datasource = new oj.CollectionTableDataSource(users);
+      this.pagingDatasource = ko.observable();
+      this.pagingDatasource(new oj.PagingTableDataSource(this.datasource));
+    }
+
+    ko.applyBindings(new ViewModel());
   });
 </script>

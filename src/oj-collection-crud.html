@@ -1,0 +1,152 @@
+<script type="text/javascript" src="../node_modules/requirejs/require.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+<link rel="stylesheet" href="../node_modules/@oracle/oraclejet/dist/css/alta/oj-alta.css">
+<h3>CRUD Example</h3>
+
+<oj-table id="table" data="[[pagingDatasource]]"
+  columns='[[columns]]'
+  selectionMode='{"row": "none", "column": "none"}'
+  row-renderer='[[oj.KnockoutTemplateUtils.getRenderer("row_tmpl", true)]]'>
+
+  <oj-paging-control data='[[pagingDatasource]]' page-size='5'
+      style="margin-top: 5px;" slot='bottom'>
+  </oj-paging-control> 
+</oj-table>
+
+<oj-dialog id="editDialog" style="display:none" title="Edit User"
+drag-affordance="title-bar" modality="modeless" resize-behavior="none">
+  <div slot="header" class="oj-helper-clearfix" aria-labelledby="dialog-title-id">
+    <div>
+      <span id="dialog-title-id" class="oj-dialog-title">Edit User</span>
+    </div>
+  </div>
+  <div slot="body">
+    <div data-bind="with:editDialog.data">
+      <div class="oj-md-odd-cols-4">
+        <oj-label for="newName" class="oj-label">Name</oj-label>
+        <oj-input-text id="newName" value="{{name}}"></oj-input-text>
+      </div>
+      <div class="oj-md-odd-cols-4">
+        <oj-label for="newAge" class="oj-label">Age</oj-label>
+        <oj-input-text id="newAge" value="{{age}}"></oj-input-text>
+      </div>
+      <div class="oj-md-odd-cols-4">
+        <oj-label for="newCity" class="oj-label">City</oj-label>
+        <oj-input-text id="newCity" value="{{city}}"></oj-input-text>
+      </div>
+    </div>
+  </div>
+  <div slot="footer">
+    <oj-button id="submitBtn" on-click="[[editUser]]">Edit</oj-button>
+    <oj-button id="resetBtn" on-click="[[editDialog.close]]">Cancel</oj-button>
+  </div>
+</oj-dialog>
+
+<script type="text/html" id="row_tmpl">    
+  <tr>
+    <td><div data-bind="text: name"></div></td>
+    <td><div data-bind="text: age"></div></td>
+    <td><div data-bind="text: city"></div></td>
+    <td>
+      <oj-button data-bind="click:$parent.editDialog.open" class="oj-button-sm">Edit</oj-button>
+      <oj-button
+        data-bind="click:$parent.deleteUser" class="oj-button-sm">Delete</oj-button>
+    </td>
+  </tr>
+</script>
+
+<script type="text/javascript">
+  require(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojmodel',
+  'ojs/ojcollectiontabledatasource', 'ojs/ojtable',
+  'ojs/ojcollectionpagingdatasource',
+  'ojs/ojdialog',
+  'ojs/ojpagingtabledatasource', 'ojs/ojpagingcontrol',
+  'ojs/ojknockout', 'ojs/ojmodule', 'ojs/ojbutton'], function(oj, ko, $) {
+    function ViewModel() {
+      let self = this;
+
+      var User = oj.Model.extend({
+        urlRoot: 'http://localhost:5000/api/users'
+      });
+      var Users = oj.Collection.extend({
+        customURL: function(operation, collection, options) {
+          if(!isNaN(options.fetchSize) && !isNaN(options.startIndex)) {
+            return `http://localhost:5000/api/users?$limit=${options.fetchSize}&$skip=${options.startIndex}`;
+          }
+
+          return 'http://localhost:5000/api/users';
+        },
+        model: User,
+        customPagingOptions: function(response) {
+          if(!response || !response.data) {
+            return response;
+          }
+
+          return {
+            totalResults: response.total,
+            limit: response.limit,
+            count: response.data.length,
+            offset: response.skip,
+            hasMore: (response.skip + response.data.length) < response.total
+          };
+        }
+      });
+
+      this.users = new Users();
+
+      this.users
+        .fetch({
+          startIndex: 0,
+          fetchSize: 5
+        })
+        .then((data) => console.log(data))
+        .catch((error) => console.log(error));
+
+      this.columns = [
+        {"headerText": "Name", "field": "name", "sortable": "enabled"},
+        {"headerText": "Age", "field": "age", "sortable": "enabled"},
+        {"headerText": "City", "field": "city", "sortable": "enabled"},
+        {"headerText": "Actions", "sortable": "disabled"}
+      ];
+
+      this.datasource = new oj.CollectionTableDataSource(this.users);
+      this.pagingDatasource = ko.observable();
+      this.pagingDatasource(new oj.PagingTableDataSource(this.datasource));
+
+      this.editDialog = {
+        data: ko.observable(),
+        open: function(data, event) {
+          self.editDialog.data({
+            id: data.id,
+            name: data.name,
+            age: data.age,
+            city: data.city
+          });
+          document.getElementById("editDialog").open();  
+        },
+        close: function() {
+          document.getElementById("editDialog").close();
+        }
+      }
+
+      this.editUser = function() {
+        let data = self.editDialog.data();
+        self.users.get(data.id, {deferred: true}).then(function(model) {
+          model.save(data, {wait:true});
+        });
+        self.editDialog.close();
+      }
+
+      this.deleteUser = function(data, event){
+        self.users.get(data.id, {deferred: true}).then(function(model) {
+          console.log(model);
+          console.log(data.id);
+          model.destroy({wait:true});
+        });
+      };
+    }
+
+    ko.applyBindings(new ViewModel());
+  });
+</script>
