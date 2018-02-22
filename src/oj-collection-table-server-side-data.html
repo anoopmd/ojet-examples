@@ -1,0 +1,54 @@
+<link rel="stylesheet" href="../node_modules/@oracle/oraclejet/dist/css/alta/oj-alta.css">
+<script type="text/javascript" src="../node_modules/requirejs/require.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+<oj-table id="table" aria-label="Users Table"
+          data='[[pagingDatasource]]'
+          selection-mode='{"row": "single", "column": "multiple"}' 
+          columns='[{"headerText": "ID", "field": "id"},
+                    {"headerText": "First Name", "field": "first_name"},
+                    {"headerText": "Last Name", "field": "last_name"}]'
+          style='width: 100%;'>
+    <oj-paging-control id="paging" data='[[pagingDatasource]]' page-size='5'
+        style="margin-top: 5px;" slot='bottom'>
+    </oj-paging-control> 
+</oj-table>
+
+
+<script type="text/javascript">
+require(['ojs/ojcore', 'knockout', 'js/models/user',
+  'js/models/users','ojs/ojtable', 'ojs/ojknockout',
+  'ojs/ojpagingtabledatasource', 'ojs/ojpagingcontrol',
+  'ojs/ojcollectiontabledatasource'], function(oj, ko, User, Users) {
+
+  function ViewModel() {
+    let users = new Users();
+    this.pagingDatasource = ko.observable();
+    datasource = new oj.CollectionTableDataSource(users);
+    this.pagingDatasource(new oj.PagingTableDataSource(datasource));
+
+    users
+      .fetch()
+      .then((data) => console.log(data))
+      .catch((error) => console.log(error));
+  }
+
+   ko.applyBindings(new ViewModel());
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

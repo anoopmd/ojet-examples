@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="../node_modules/@oracle/oraclejet/dist/css/alta/oj-alta.css">
+<script type="text/javascript" src="../node_modules/requirejs/require.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+<oj-data-grid 
+    style="height:400px; max-width:350px" 
+    aria-label="Data Grid CRUD Demo"
+    data="[[dataSource]]"
+    selection-mode.row="single"
+    dnd.reorder.row="enable"
+    header.column.renderer="[[oj.KnockoutTemplateUtils.getRenderer('header_template')]]"
+    header.column.style="width:100px"
+></oj-data-grid>
+
+ <script type="text/html" id="header_template">
+    <!-- ko if: $context.key=='first_name' -->  
+    <span data-bind="text: 'First Name'"></span>
+    <!-- /ko -->
+    <!-- ko if: $context.key=='last_name' -->  
+    <span data-bind="text: 'Last Name'"></span>
+    <!-- /ko -->
+</script>
+
+
+<script type="text/javascript">
+require(['ojs/ojcore', 'knockout', 'js/models/user',
+  'js/models/users','ojs/ojtable', 'ojs/ojknockout',
+  'promise', 'ojs/ojdatagrid',
+  'ojs/ojcollectiondatagriddatasource',
+  'ojs/ojcollectiontabledatasource'], function(oj, ko, User, Users) {
+
+  function ViewModel() {
+    let users = new Users();
+    this.dataSource = new oj.CollectionDataGridDataSource(users, {
+      rowHeader: 'id', 
+      columns:['first_name', 'last_name']
+    });
+
+    users
+      .fetch()
+      .then((data) => console.log(data))
+      .catch((error) => console.log(error));
+  }
+
+   ko.applyBindings(new ViewModel());
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

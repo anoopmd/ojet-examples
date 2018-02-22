@@ -31,6 +31,8 @@
     oj.ModuleBinding.defaults.modelPath = 'src/viewModels/oj-router/';
     oj.ModuleBinding.defaults.viewPath = 'text!src/views/oj-router/';
 
+    oj.Router.defaults['urlAdapter'] = new oj.Router.urlPathAdapter();
+
     router.configure({
       'chap1':  { label: 'Chapter 1', value: 'chapter-1',
                  isDefault: true },
@@ -38,9 +40,11 @@
     });
     router.stateId('chap1');
 
-    ko.applyBindings({
+    var viewModel = {
       router: router
-    }, document.getElementById('routing-container'));
+    };
+
+    ko.applyBindings(viewModel, document.getElementById('routing-container'));
     
     setTimeout(() => {
       oj.Router.sync();

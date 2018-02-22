@@ -1,3 +1,6 @@
 define([], function(){
-  return {};
+  function ViewModel(viewParams){
+    console.log(viewParams['ojRouter']);
+  }
+  return ViewModel;
 });
