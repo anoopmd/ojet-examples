@@ -1,0 +1,110 @@
+{
+	"variables": [],
+	"info": {
+		"name": "OJet Examples Server",
+		"_postman_id": "d02aaa41-5bd3-bb8e-4427-cdb55617e2fa",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"request": {
+				"url": "http://localhost:5000/api/users",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Users (Pagination)",
+			"request": {
+				"url": {
+					"raw": "http://localhost:5000/api/users?$limit=5&$skip=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "$limit",
+							"value": "5",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "$skip",
+							"value": "5",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Users",
+			"request": {
+				"url": "http://localhost:5000/api/users",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Jerry 5\",\n\t\"age\": 23,\n\t\"city\": \"Bangalore\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Users",
+			"request": {
+				"url": "http://localhost:5000/api/users/8492c3c2df0f8701",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"8492c3c2df0f8701\",\n    \"name\": \"Jerry NEW\",\n    \"age\": 23,\n    \"city\": \"Bangalore\",\n    \"_id\": \"1oNScQoREV5khIKI\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Users",
+			"request": {
+				"url": "http://localhost:5000/api/users/85c72dfa0e8cd32b",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
