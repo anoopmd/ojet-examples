@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="../node_modules/@oracle/oraclejet/dist/css/alta/oj-alta.css">
+<script type="text/javascript" src="../node_modules/requirejs/require.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+<span data-bind="text: priceConverter.format(price)"></span>
+
+<script type="text/javascript">
+  require(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojknockout',
+  'ojs/ojdatetimepicker', 'ojs/ojlabel', 'ojs/ojvalidation-number',
+  'ojs/ojinputtext'], function(oj, ko, $) {
+
+    var options = {
+      "style":"currency", 
+      "currency":"EUR", 
+      "currencyDisplay":"symbol"
+    };
+
+    let vm = {};
+    
+    vm.price = "120";
+    vm.priceConverter = oj.Validation.converterFactory("number").
+            createConverter(options);
+
+    ko.applyBindings(vm);
+  });
+</script>

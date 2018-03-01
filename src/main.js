@@ -20,5 +20,12 @@ requirejs.config({
     'jquery': {
       exports: ['jQuery', '$']
     }
+  },
+  config: {
+    ojL10n: {
+      merge: {
+        'ojtranslations/nls/ojtranslations': 'resources/nls/hw'
+      }
+    }
   }
 });

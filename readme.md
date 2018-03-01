@@ -8,6 +8,16 @@ A set of Ojet Examples
 ### FAQ
 *[Choosing a Table or Data Grid](https://docs.oracle.com/middleware/jet201/jet/developer/GUID-7A444A99-036C-46E6-B271-A5E3926E8300.htm#JETDG402)
 
+### Chrome Extensions for Accessibilty Audits
+* [WCAG Accessibility Audit Developer UI](https://chrome.google.com/webstore/detail/wcag-accessibility-audit/kpfleokokmllclahndmochhenmhncoej/related?hl=en)
+* [Accessibility Dev Tools](https://chrome.google.com/webstore/detail/accessibility-developer-t/fpkknkljclfencbdbgkenhalefipecmb?hl=en)
+
+### Accessibility
+* [Spec](https://www.w3.org/TR/wai-aria-1.1/)
+* [WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices-1.1/#link)
+* [ARIA Cheatsheet](http://karlgroves-sandbox.com/CheatSheets/ARIA-Cheatsheet.html)
+* [ARIA Cheatsheet](https://github.com/filipelinhares/WAI-ARIA-cheatsheet)
+
 
 ### References
 * [Featured Demos](http://www.oracle.com/webfolder/ux/middleware/alta/featuredDemos.html)
